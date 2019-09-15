@@ -60,7 +60,7 @@ class FavoriteFragment: Fragment(),
 
     private fun setFavoriteAdapter(list: List<MobileModel>){
         sortList = list
-        //            because of Only the original thread that created a view hierarchy can touch its views
+        //because of Only the original thread that created a view hierarchy can touch its views
 
         activity?.runOnUiThread(object : Runnable{
             override fun run() {
