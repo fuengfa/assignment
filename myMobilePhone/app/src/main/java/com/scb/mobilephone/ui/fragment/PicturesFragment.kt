@@ -23,11 +23,11 @@ class PicturesFragment(var imageUrl: String) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         picInViewpager.let {
-                if(imageUrl.contains("http",true)){
+            if (imageUrl.contains("http", true)) {
 
-                }else{
-                    imageUrl = "https://${imageUrl}"
-                }
+            } else {
+                imageUrl = "https://${imageUrl}"
+            }
 
             Glide.with(this).load(imageUrl).into(it)
         }

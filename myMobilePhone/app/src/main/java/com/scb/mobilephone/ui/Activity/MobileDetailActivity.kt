@@ -1,11 +1,7 @@
 package com.scb.mobilephone.ui.Activity
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.scb.mobilephone.ui.Service.ApiManager
@@ -46,13 +42,11 @@ class MobileDetailActivity : AppCompatActivity() {
 
     private val pictureCallback = object : Callback<List<Pictures>> {
         override fun onFailure(call: Call<List<Pictures>>, t: Throwable) {
-            Log.d("fuengfa","size : empty")
         }
 
         override fun onResponse(call: Call<List<Pictures>>, response: Response<List<Pictures>>) {
             pictures.clear()
             pictures.addAll(response.body()!!)
-            Log.d("fuengfa","size : ${pictures.size}")
             imageSlider.adapter = PhotoPagerAdapter(supportFragmentManager, pictures)
         }
     }
@@ -67,7 +61,6 @@ class MobileDetailActivity : AppCompatActivity() {
         detailprice.text = "Price: ${mobile.price}"
         detailRating.text = "Rating: ${mobile.rating}"
         loadPictures(mobile)
-
     }
 
     override fun onSupportNavigateUp(): Boolean {

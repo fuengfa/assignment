@@ -3,19 +3,15 @@ package com.scb.mobilephone.ui.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.scb.mobilephone.ui.main.SectionsPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.scb.mobilephone.R
-import com.scb.mobilephone.ui.fragment.FavoriteFragment
 import com.scb.mobilephone.ui.fragment.MobileFragment
 import com.scb.mobilephone.ui.model.AppDatbase
 import com.scb.mobilephone.ui.model.CMWorkerThread
-import com.scb.mobilephone.ui.model.MobileModel
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,25 +35,25 @@ class MainActivity : AppCompatActivity() {
                 when (item) {
                     0 -> {
                         if (viewPager.currentItem == 0) {
-                            sectionsPagerAdapter.mobileFragment.sortlowtoheight()
-                        }else if (viewPager.currentItem == 1){
-                            sectionsPagerAdapter.favoriteFragment.sortlowtoheight()
+                            sectionsPagerAdapter.mobileFragment.sortPriceLowToHeight()
+                        } else if (viewPager.currentItem == 1) {
+                            sectionsPagerAdapter.favoriteFragment.sortPriceLowToHeight()
                         }
                     }
 
                     1 -> {
                         if (viewPager.currentItem == 0) {
-                            sectionsPagerAdapter.mobileFragment.sorthighttolow()
-                        }else if (viewPager.currentItem == 1){
-                            sectionsPagerAdapter.favoriteFragment.sorthighttolow()
+                            sectionsPagerAdapter.mobileFragment.sortPriceHighToLow()
+                        } else if (viewPager.currentItem == 1) {
+                            sectionsPagerAdapter.favoriteFragment.sortPriceHighToLow()
                         }
                     }
 
                     2 -> {
                         if (viewPager.currentItem == 0) {
                             sectionsPagerAdapter.mobileFragment.sortRating()
-                        }else if (viewPager.currentItem == 1){
-                            sectionsPagerAdapter.favoriteFragment.sortrating()
+                        } else if (viewPager.currentItem == 1) {
+                            sectionsPagerAdapter.favoriteFragment.sortRatingFromHighToLow()
                         }
                     }
                 }
@@ -69,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         setupDatabase()
         setupWorkerThread()
     }
-
 
     private fun setupWorkerThread() {
         mCMWorkerThread = CMWorkerThread("scb_database").also {
@@ -84,7 +79,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun initialValue() {
-//        alertDialog1 = presenter.creatDialog(this)
         viewPager = findViewById(R.id.view_pager)
         tabs = findViewById(R.id.tabs)
     }
@@ -93,11 +87,10 @@ class MainActivity : AppCompatActivity() {
     fun createSectionPageAgapter() {
         sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         viewPager.adapter = sectionsPagerAdapter
-//        viewPager.addOnPageChangeListener()
         tabs.setupWithViewPager(viewPager)
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
@@ -105,21 +98,18 @@ class MainActivity : AppCompatActivity() {
                 if (tab?.position == 0) {
                     sectionsPagerAdapter.mobileFragment.onDataChange()
 
-                }else{
-                    println("11111")
+                } else {
                     sectionsPagerAdapter.favoriteFragment.submitDataChange()
-
                 }
             }
-
         })
     }
 }
 
 interface OnSortClickListener {
-    fun sortlowtoheight()
-    fun sorthighttolow()
-    fun sortrating()
+    fun sortPriceLowToHeight()
+    fun sortPriceHighToLow()
+    fun sortRatingFromHighToLow()
 }
 
 

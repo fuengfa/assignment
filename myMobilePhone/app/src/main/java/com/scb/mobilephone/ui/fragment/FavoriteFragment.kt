@@ -2,7 +2,6 @@ package com.scb.mobilephone.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,11 +19,10 @@ import com.scb.mobilephone.ui.callback.CustomItemTouchHelperCallback
 import com.scb.mobilephone.ui.model.*
 
 class FavoriteFragment: Fragment(),
-    OnSortClickListener, deleteFavorite{
-
-
-    private lateinit var rvMobile: RecyclerView
-    private lateinit var moAdapter: FavoriteAdapter
+    OnSortClickListener, deleteFavorite {
+    
+    private lateinit var recyclerViewMobileFavList: RecyclerView
+    private lateinit var favoriteAdapter: FavoriteAdapter
     private lateinit var sortList: List<MobileModel>
     private var roomDatabase: AppDatbase? = null
     private var cmWorkerThread: CMWorkerThread = CMWorkerThread("favorite").also {
@@ -38,36 +36,48 @@ class FavoriteFragment: Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         var _view = inflater.inflate(R.layout.fragment_favorite, container, false)
-       return _view
+        return _view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvMobile = view.findViewById(R.id.recyclerView)
-        moAdapter = FavoriteAdapter(this)
-        rvMobile.adapter = moAdapter
-        rvMobile.layoutManager = LinearLayoutManager(view.context)
-        rvMobile.itemAnimator = DefaultItemAnimator()
-
-        val callback = CustomItemTouchHelperCallback(moAdapter)
-        val itemTouchHelper = ItemTouchHelper(callback)
-        itemTouchHelper.attachToRecyclerView(rvMobile)
-        roomDatabase = AppDatbase.getInstance(view.context).also {
-            it.openHelper.readableDatabase
-        }
+        favoriteAdapter = FavoriteAdapter(this)
+        setRecyclerView(view)
+        setSwipeToDelete()
+        setRoomDatabase(view)
         loadFavoriteList()
     }
 
-    private fun setFavoriteAdapter(list: List<MobileModel>){
-        sortList = list
-        //because of Only the original thread that created a view hierarchy can touch its views
-
-        activity?.runOnUiThread(object : Runnable{
-            override fun run() {
-                moAdapter.submitList(sortList)            }
-        })
+    private fun setSwipeToDelete() {
+        val callback = CustomItemTouchHelperCallback(favoriteAdapter)
+        val itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(recyclerViewMobileFavList)
     }
 
+    private fun setRoomDatabase(view: View) {
+        roomDatabase = AppDatbase.getInstance(view.context).also {
+            it.openHelper.readableDatabase
+        }
+    }
+
+    private fun setRecyclerView(view: View) {
+        recyclerViewMobileFavList = view.findViewById(R.id.recyclerView)
+        recyclerViewMobileFavList.let {
+            it.adapter = favoriteAdapter
+            it.layoutManager = LinearLayoutManager(view.context)
+            it.itemAnimator = DefaultItemAnimator()
+        }
+    }
+
+    private fun setFavoriteAdapter(list: List<MobileModel>) {
+        sortList = list
+        //because of Only the original thread that created a view hierarchy can touch its views
+        activity?.runOnUiThread(object : Runnable {
+            override fun run() {
+                favoriteAdapter.submitList(sortList)
+            }
+        })
+    }
 
     override fun showDetail(mobile: MobileModel, _view: View) {
         var intent = Intent(context, MobileDetailActivity::class.java)
@@ -86,31 +96,31 @@ class FavoriteFragment: Fragment(),
         cmWorkerThread.postTask(task)
     }
 
-    private fun loadFavoriteList()  {
-        var favList: List<MobileEntity>? = null
+    private fun loadFavoriteList() {
         val task = Runnable {
-            favList = roomDatabase?.mobileDao()?.queryMobiles()
+            var favList = roomDatabase?.mobileDao()?.queryMobiles()
             setFavoriteAdapter(mobileModelMapper(favList ?: listOf()))
         }
         cmWorkerThread.postTask(task)
     }
 
     private fun mobileModelMapper(entity: List<MobileEntity>): ArrayList<MobileModel> {
-        val  mobileModelList = arrayListOf<MobileModel>()
-
-        entity.forEach{
+        val mobileModelList = arrayListOf<MobileModel>()
+        entity.forEach {
             mobileModelList.add(it.transformToMobileModel())
         }
         return mobileModelList
     }
 
-    override fun sortlowtoheight() {
+    override fun sortPriceLowToHeight() {
         setFavoriteAdapter(sortList.sortedBy { it.price })
     }
-    override fun sorthighttolow() {
+
+    override fun sortPriceHighToLow() {
         setFavoriteAdapter(sortList.sortedByDescending { it.price })
     }
-    override fun sortrating() {
+
+    override fun sortRatingFromHighToLow() {
         setFavoriteAdapter(sortList.sortedByDescending { it.rating })
     }
 }

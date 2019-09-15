@@ -7,7 +7,7 @@
              android:layout_height="match_parent"
              tools:context=".ui.fragment.MobileFragment">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipt_toRefresh"
+            android:id="@+id/swipe_toRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <androidx.recyclerview.widget.RecyclerView

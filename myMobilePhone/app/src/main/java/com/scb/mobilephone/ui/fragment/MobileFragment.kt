@@ -29,7 +29,7 @@ class MobileFragment: Fragment(),
         loadSongs()
     }
 
-    private lateinit var rvMobile: RecyclerView
+    private lateinit var recyclerViewMobile: RecyclerView
     private lateinit var mobileAdapter: MobileAdapter
     private lateinit var sortList: List<MobileModel>
     private var roomDatabase: AppDatbase? = null
@@ -46,62 +46,78 @@ class MobileFragment: Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-        rvMobile = view.findViewById(R.id.recyclerView)
         mobileAdapter = MobileAdapter(this)
-        rvMobile.adapter = mobileAdapter
-        rvMobile.layoutManager = LinearLayoutManager(context)
-        rvMobile.itemAnimator = DefaultItemAnimator()
-        roomDatabase = AppDatbase.getInstance(view.context).also {
-            it.openHelper.readableDatabase
-        }
+        setRecyclerView(view)
+        setRoomDatabase(view)
         loadSongs()
-        swipt_toRefresh.setOnRefreshListener {
+        swipe_toRefresh.setOnRefreshListener {
             loadSongs()
 
         }
     }
 
+    private fun setRoomDatabase(view: View) {
+        roomDatabase = AppDatbase.getInstance(view.context).also {
+            it.openHelper.readableDatabase
+        }
+    }
+
+    private fun setRecyclerView(view: View) {
+        recyclerViewMobile = view.findViewById(R.id.recyclerView)
+        recyclerViewMobile.let {
+            it.adapter = mobileAdapter
+            it.layoutManager = LinearLayoutManager(context)
+            it.itemAnimator = DefaultItemAnimator()
+        }
+
+    }
+
     private val songListCallback = object : Callback<List<MobileModel>> {
         override fun onFailure(call: Call<List<MobileModel>>, t: Throwable) {
-            println("conttext Showtoast")
             context?.showToast("Can not call country list $t")
         }
 
         override fun onResponse(call: Call<List<MobileModel>>, response: Response<List<MobileModel>>) {
-            Handler().postDelayed({
-                swipt_toRefresh.isRefreshing = false
-            }, 3000)
+            swipeToDeleteStop()
             context?.showToast("Success")
             sortList = response.body()!!
-            var favlist: MobileEntity?
                 var task = Runnable {
                     for (list in sortList) {
-                        favlist = roomDatabase?.mobileDao()!!.queryMobile(list.id)
+                        var favlist = roomDatabase?.mobileDao()!!.queryMobile(list.id)
                         if (favlist != null) {
                             list.fav = 1
                         }
                     }
                 }
                 cmWorkerThread.postTask(task)
-
-//            because of Only the original thread that created a view hierarchy can touch its views
-            activity?.runOnUiThread(object : Runnable{
-                override fun run() {
-                    setMobileAdapter(sortList)           }
-            })
-
+                runUiThread()
         }
     }
 
-    override fun sortlowtoheight() {
+    fun runUiThread(){
+        //because of Only the original thread that created a view hierarchy can touch its views
+        activity?.runOnUiThread(object : Runnable{
+            override fun run() {
+                setMobileAdapter(sortList)
+            }
+        })
+    }
+
+    private fun swipeToDeleteStop() {
+        Handler().postDelayed({
+            swipe_toRefresh.isRefreshing = false
+        }, 3000)
+    }
+
+    override fun sortPriceLowToHeight() {
         setMobileAdapter(sortList.sortedBy { it.price })
     }
 
-    override fun sorthighttolow() {
+    override fun sortPriceHighToLow() {
         setMobileAdapter(sortList.sortedByDescending { it.price })
     }
 
-    override fun sortrating() {
+    override fun sortRatingFromHighToLow() {
         setMobileAdapter(sortList.sortedByDescending { it.rating })
     }
 
@@ -114,20 +130,23 @@ class MobileFragment: Fragment(),
 
         var task = Runnable {
             if(mobile.fav == 1){
-                roomDatabase?.mobileDao()!!.addMobile(MobileEntity(mobile.id,mobile.name, mobile.description, mobile.brand,
-                    mobile.price, mobile.rating, mobile.thumbImageURL, mobile.fav))
+                roomDatabase?.mobileDao()!!.addMobile(createMobileEntity(mobile))
             } else {
                 roomDatabase?.mobileDao()!!.deleteMobilebyID(mobile.id)
             }
         }
         cmWorkerThread.postTask(task)
-        mobileAdapter.submitList(sortList)
+        setMobileAdapter(sortList)
 
     }
 
+    private fun createMobileEntity(mobile: MobileModel): MobileEntity{
+        return MobileEntity(mobile.id,mobile.name, mobile.description, mobile.brand,
+            mobile.price, mobile.rating, mobile.thumbImageURL, mobile.fav)
+    }
+
     override fun onMobileClick(mobile: MobileModel, _view: View) {
-        var intent = Intent(context, MobileDetailActivity::class.java)
-        intent.putExtra("mobile", mobile)
+        var intent = Intent(context, MobileDetailActivity::class.java).putExtra("mobile", mobile)
         context!!.startActivity(intent)
     }
 
