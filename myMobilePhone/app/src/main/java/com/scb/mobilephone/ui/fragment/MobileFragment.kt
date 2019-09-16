@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scb.mobilephone.*
-import com.scb.mobilephone.ui.Activity.MobileDetailActivity
-import com.scb.mobilephone.ui.Activity.OnSortClickListener
+import com.scb.mobilephone.ui.activity.MobileDetailActivity
+import com.scb.mobilephone.ui.activity.OnSortClickListener
 import com.scb.mobilephone.ui.Service.ApiManager
 import com.scb.mobilephone.ui.adapter.MobileAdapter
 import com.scb.mobilephone.ui.adapter.OnMobileClickListener

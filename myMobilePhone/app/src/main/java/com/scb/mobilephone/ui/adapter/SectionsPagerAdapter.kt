@@ -1,4 +1,4 @@
-package com.scb.mobilephone.ui.main
+package com.scb.mobilephone.ui.adapter
 
 import android.content.Context
 import androidx.fragment.app.Fragment

@@ -30,6 +30,12 @@ android {
 }
 
 dependencies {
+    //test
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation "org.mockito:mockito-core:2.28.2"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    testImplementation 'org.jmockit:jmockit:1.40'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
 
     implementation "androidx.room:room-runtime:2.1.0"
     kapt "androidx.room:room-compiler:2.1.0"

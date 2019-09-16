@@ -11,7 +11,7 @@ import com.scb.mobilephone.ui.callback.CustomItemTouchHelperListener
 import com.scb.mobilephone.R
 import com.scb.mobilephone.ui.model.*
 
-class FavoriteAdapter(val deleteListener: deleteFavorite) :RecyclerView.Adapter<FavViewHolder>(), CustomItemTouchHelperListener {
+class FavoriteAdapter(private val deleteListener: DeleteFavorite) :RecyclerView.Adapter<FavViewHolder>(), CustomItemTouchHelperListener {
 
     private var _mobiles: List<MobileModel> = listOf()
 
@@ -20,7 +20,7 @@ class FavoriteAdapter(val deleteListener: deleteFavorite) :RecyclerView.Adapter<
     }
 
     override fun onItemDismiss(position: Int) {
-        deleteListener.OndeleteFavorite(_mobiles[position].id)
+        deleteListener.onDeleteFavorite(_mobiles[position].id)
         deleteListener.submitDataChange()
 
     }
@@ -54,7 +54,7 @@ class FavViewHolder (parent: ViewGroup) : RecyclerView.ViewHolder(
     private var mobilePrice: TextView ?=null
     private var mobileRating: TextView ?=null
 
-    fun bind(mobile: MobileModel, delete: deleteFavorite) {
+    fun bind(mobile: MobileModel, delete: DeleteFavorite) {
 
         mobilePic= itemView.findViewById(R.id.faveImage) as ImageView
         mobileName = itemView.findViewById(R.id.favName) as TextView
@@ -77,8 +77,8 @@ class FavViewHolder (parent: ViewGroup) : RecyclerView.ViewHolder(
 
 }
 
-interface deleteFavorite{
-    fun OndeleteFavorite(id: Int)
+interface DeleteFavorite{
+    fun onDeleteFavorite(id: Int)
     fun submitDataChange()
     fun showDetail(mobile: MobileModel, _view: View)
 }

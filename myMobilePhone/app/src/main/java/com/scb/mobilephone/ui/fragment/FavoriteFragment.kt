@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scb.mobilephone.*
-import com.scb.mobilephone.ui.Activity.MobileDetailActivity
-import com.scb.mobilephone.ui.Activity.OnSortClickListener
+import com.scb.mobilephone.ui.activity.MobileDetailActivity
+import com.scb.mobilephone.ui.activity.OnSortClickListener
 import com.scb.mobilephone.ui.adapter.FavoriteAdapter
-import com.scb.mobilephone.ui.adapter.deleteFavorite
+import com.scb.mobilephone.ui.adapter.DeleteFavorite
 import com.scb.mobilephone.ui.callback.CustomItemTouchHelperCallback
 import com.scb.mobilephone.ui.model.*
 
 class FavoriteFragment: Fragment(),
-    OnSortClickListener, deleteFavorite {
-    
+    OnSortClickListener, DeleteFavorite {
+
     private lateinit var recyclerViewMobileFavList: RecyclerView
     private lateinit var favoriteAdapter: FavoriteAdapter
     private lateinit var sortList: List<MobileModel>
@@ -89,7 +89,7 @@ class FavoriteFragment: Fragment(),
         loadFavoriteList()
     }
 
-    override fun OndeleteFavorite(id: Int) {
+    override fun onDeleteFavorite(id: Int) {
         val task = Runnable {
             roomDatabase?.mobileDao()?.deleteMobilebyID(id)
         }
