@@ -35,8 +35,7 @@ class FavoriteFragment: Fragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var _view = inflater.inflate(R.layout.fragment_favorite, container, false)
-        return _view
+        return inflater.inflate(R.layout.fragment_favorite, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,11 +71,9 @@ class FavoriteFragment: Fragment(),
     private fun setFavoriteAdapter(list: List<MobileModel>) {
         sortList = list
         //because of Only the original thread that created a view hierarchy can touch its views
-        activity?.runOnUiThread(object : Runnable {
-            override fun run() {
-                favoriteAdapter.submitList(sortList)
-            }
-        })
+        activity?.runOnUiThread {
+            favoriteAdapter.submitList(sortList)
+        }
     }
 
     override fun showDetail(mobile: MobileModel, _view: View) {

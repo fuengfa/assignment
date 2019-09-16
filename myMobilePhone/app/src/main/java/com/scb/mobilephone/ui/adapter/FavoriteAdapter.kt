@@ -22,9 +22,7 @@ class FavoriteAdapter(private val deleteListener: DeleteFavorite) :RecyclerView.
     override fun onItemDismiss(position: Int) {
         deleteListener.onDeleteFavorite(_mobiles[position].id)
         deleteListener.submitDataChange()
-
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         FavViewHolder(parent)
