@@ -16,25 +16,15 @@ import com.scb.mobilephone.ui.adapter.MobileAdapter
 import com.scb.mobilephone.ui.adapter.OnMobileClickListener
 import com.scb.mobilephone.ui.model.*
 import kotlinx.android.synthetic.main.fragment_mobile.*
+import java.lang.NullPointerException
 
-class MobileFragment: Fragment(),
+class MobileFragment : Fragment(),
     OnMobileClickListener, OnSortClickListener, MobileFragmentPresenterInterface {
 
-    override fun loadMobileList(mobileList: List<MobileModel>) {
-        this.mobileList = mobileList
-        runUiThread()
-        swipeToDeleteStop()
-    }
-
-    override fun onDataChange() {
-        presenter.loadSongs(viewFragment)
-    }
-
-    private lateinit var presenter: MobileFragmentPresenter
+    private var presenter = MobileFragmentPresenter(this)
     private lateinit var recyclerViewMobile: RecyclerView
-    private lateinit var mobileAdapter: MobileAdapter
+    private var mobileAdapter = MobileAdapter(this)
     private lateinit var mobileList: List<MobileModel>
-    private lateinit var viewFragment: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mobile, container, false)
@@ -43,14 +33,33 @@ class MobileFragment: Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewFragment = view
-        mobileAdapter = MobileAdapter(this)
-        presenter = MobileFragmentPresenter(this)
+        val roomDatabase = getRoomDatabase()
+        presenter.init(roomDatabase)
         setRecyclerView(view)
-        presenter.loadSongs(view)
         swipe_toRefresh.setOnRefreshListener {
-            presenter.loadSongs(view)
+            presenter.loadMobile()
         }
+    }
+
+    override fun loadMobileList(mobileList: List<MobileModel>) {
+        this.mobileList = mobileList
+        runUiThread()
+        swipeToDeleteStop()
+    }
+
+    private fun getRoomDatabase(): AppDatbase? {
+        context?.let {
+            var roomDatabase = AppDatbase.getInstance(it).also {
+                it.openHelper.readableDatabase
+            }
+            return roomDatabase
+        }?:run {
+            return null
+        }
+    }
+
+    override fun onDataChange() {
+        presenter.loadMobile()
     }
 
     private fun setRecyclerView(view: View) {
@@ -63,13 +72,13 @@ class MobileFragment: Fragment(),
 
     }
 
-    fun runUiThread(){
+    private fun runUiThread() {
         //because of Only the original thread that created a view hierarchy can touch its views
         activity?.runOnUiThread { setMobileAdapter(mobileList) }
     }
 
     private fun swipeToDeleteStop() {
-            swipe_toRefresh.isRefreshing = false
+        swipe_toRefresh.isRefreshing = false
     }
 
     override fun sortPriceLowToHeight() {
@@ -102,11 +111,11 @@ class MobileFragment: Fragment(),
 
     private fun setMobileAdapter(list: List<MobileModel>) {
         mobileList = list
-        mobileAdapter.submitList(list)
+        mobileAdapter.submitList(mobileList)
     }
 }
 
-interface MobileFragmentPresenterInterface{
+interface MobileFragmentPresenterInterface {
     fun loadMobileList(mobileList: List<MobileModel>)
 }
 
