@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         sortIt.setOnClickListener {
             var builder = AlertDialog.Builder(this)
             var values = arrayOf<CharSequence>(" Price low to high ", " Price high to low ", " Rating 5-1 ")
-            builder.setSingleChoiceItems(values, -1, DialogInterface.OnClickListener { dialog, item ->
+            builder.setSingleChoiceItems(values, -1, DialogInterface.OnClickListener { _, item ->
                 when (item) {
                     0 -> sectionsPagerAdapter.sortFunction(item)
 
@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun createSectionPageAdapter() {
-        sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        sectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
         viewPager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(viewPager)
     }

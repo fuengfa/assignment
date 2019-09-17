@@ -1,6 +1,5 @@
 package com.scb.mobilephone.ui.adapter
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -12,7 +11,7 @@ private val TAB_TITLES = arrayOf(
     "FAVORITE LIST"
 )
 
-class SectionsPagerAdapter(private val context: Context, val fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class SectionsPagerAdapter(val fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
 
     override fun getItem(position: Int): Fragment {
