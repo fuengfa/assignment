@@ -32,7 +32,7 @@ class MobileFragment : Fragment(),
     }
 
     override fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG)
+//        Toast.makeText(context, message, Toast.LENGTH_LONG)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

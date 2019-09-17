@@ -11,7 +11,7 @@ import com.scb.mobilephone.R
 import kotlinx.android.synthetic.main.fragment_pictures.*
 
 
-class PicturesFragment() : Fragment() {
+class PicturesFragment : Fragment() {
 
     private var imageUrl: String? = " "
     override fun onCreateView(

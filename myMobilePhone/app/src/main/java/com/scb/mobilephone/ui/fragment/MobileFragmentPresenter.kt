@@ -20,11 +20,11 @@ class MobileFragmentPresenter(val view: MobileFragmentPresenterInterface) {
 
     private val songListCallback = object : Callback<List<MobileModel>> {
         override fun onFailure(call: Call<List<MobileModel>>, t: Throwable) {
-            view.showToast("Can not load Mobile list!!")
+//            view.showToast("Can not load Mobile list!!")
         }
 
         override fun onResponse(call: Call<List<MobileModel>>, response: Response<List<MobileModel>>) {
-            view.showToast("Download mobile list Completed!!")
+//            view.showToast("Download mobile list Completed!!")
             queryRoomDatabaseByMobileId(response.body()!!)
         }
     }
