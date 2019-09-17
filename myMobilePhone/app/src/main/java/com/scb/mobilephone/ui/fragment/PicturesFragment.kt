@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.fragment_pictures.*
 
 class PicturesFragment() : Fragment() {
 
-    private var imageUrl: String? = ""
+    private var imageUrl: String? = " "
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         if (arguments != null) {
-            imageUrl = arguments!!.getString("imgUrl")
+            imageUrl = arguments?.getString("imgUrl")
         }
         return inflater.inflate(R.layout.fragment_pictures, container, false)
     }
@@ -27,9 +27,8 @@ class PicturesFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         picInViewpager.let {
-            imageUrl?.let {
-
-            }contains("http", true) )
+            if (imageUrl!!.contains("http", true)) {
+            }else{
                 imageUrl = "https://${imageUrl}"
             }
             Glide.with(this).load(imageUrl).into(it)
