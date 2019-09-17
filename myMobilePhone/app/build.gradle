@@ -33,6 +33,7 @@ android {
 
 dependencies {
     //test
+    implementation 'com.google.android.gms:play-services-plus:17.0.0'
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation "org.mockito:mockito-core:2.28.2"
     testImplementation 'org.mockito:mockito-inline:2.8.47'

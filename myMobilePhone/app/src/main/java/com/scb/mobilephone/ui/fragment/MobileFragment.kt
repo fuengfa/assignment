@@ -15,6 +15,7 @@ import com.scb.mobilephone.ui.activity.MobileDetailActivity
 import com.scb.mobilephone.ui.activity.OnSortClickListener
 import com.scb.mobilephone.ui.adapter.MobileAdapter
 import com.scb.mobilephone.ui.adapter.OnMobileClickListener
+import com.scb.mobilephone.ui.adapter.PhotoPagerAdapter
 import com.scb.mobilephone.ui.model.*
 import kotlinx.android.synthetic.main.fragment_mobile.*
 

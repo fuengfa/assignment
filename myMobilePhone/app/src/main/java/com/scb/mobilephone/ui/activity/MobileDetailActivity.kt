@@ -18,7 +18,8 @@ class MobileDetailActivity : AppCompatActivity() , MobileDetailInterface{
     private lateinit var detailDes: TextView
     private lateinit var detailprice: TextView
     private lateinit var detailRating: TextView
-    private lateinit var imageSlider: ViewPager
+    private lateinit var viewPager: ViewPager
+    private lateinit var photoPagerAdapter : PhotoPagerAdapter
     private lateinit var pictures: ArrayList<Pictures>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,12 +40,15 @@ class MobileDetailActivity : AppCompatActivity() , MobileDetailInterface{
         detailDes.text = mobile.description
         detailprice.text = "Price: ${mobile.price}"
         detailRating.text = "Rating: ${mobile.rating}"
-        imageSlider.adapter = PhotoPagerAdapter(supportFragmentManager, pictures)
+        viewPager.adapter = photoPagerAdapter
+        photoPagerAdapter.setImage(pictures)
+
     }
 
     private fun onView() {
+        photoPagerAdapter = PhotoPagerAdapter(supportFragmentManager)
         presenter = MobileDetailPresenter(this)
-        imageSlider = findViewById(R.id.viewpager)
+        viewPager = findViewById(R.id.viewpager)
         detailName = findViewById(R.id.detailName)
         detailRating = findViewById(R.id.detailRating)
         detailDes = findViewById(R.id.detailDes)
