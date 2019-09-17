@@ -8,7 +8,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MobileDetailPresenter(val view: MobileDetailInterface) {
-    private lateinit var listPictures: ArrayList<Pictures>
+    private var listPictures: ArrayList<Pictures> = ArrayList()
 
     private val pictureCallback = object : Callback<List<Pictures>> {
         override fun onFailure(call: Call<List<Pictures>>, t: Throwable) {

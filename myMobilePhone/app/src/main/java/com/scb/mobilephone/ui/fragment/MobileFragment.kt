@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,20 +17,22 @@ import com.scb.mobilephone.ui.adapter.MobileAdapter
 import com.scb.mobilephone.ui.adapter.OnMobileClickListener
 import com.scb.mobilephone.ui.model.*
 import kotlinx.android.synthetic.main.fragment_mobile.*
-import java.lang.NullPointerException
 
 class MobileFragment : Fragment(),
     OnMobileClickListener, OnSortClickListener, MobileFragmentPresenterInterface {
 
     private var presenter = MobileFragmentPresenter(this)
-    private lateinit var recyclerViewMobile: RecyclerView
     private var mobileAdapter = MobileAdapter(this)
+    private lateinit var recyclerViewMobile: RecyclerView
     private lateinit var mobileList: List<MobileModel>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_mobile, container, false)
     }
 
+    override fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,12 +51,11 @@ class MobileFragment : Fragment(),
     }
 
     private fun getRoomDatabase(): AppDatbase? {
-        context?.let {
-            var roomDatabase = AppDatbase.getInstance(it).also {
-                it.openHelper.readableDatabase
+        context?.let { it ->
+            return AppDatbase.getInstance(it).also { database ->
+                database.openHelper.readableDatabase
             }
-            return roomDatabase
-        }?:run {
+        } ?: run {
             return null
         }
     }
@@ -69,7 +71,6 @@ class MobileFragment : Fragment(),
             it.layoutManager = LinearLayoutManager(context)
             it.itemAnimator = DefaultItemAnimator()
         }
-
     }
 
     private fun runUiThread() {
@@ -93,10 +94,6 @@ class MobileFragment : Fragment(),
         setMobileAdapter(mobileList.sortedByDescending { it.rating })
     }
 
-    fun sortRating() {
-        setMobileAdapter(mobileList.sortedByDescending { it.rating })
-    }
-
     override fun onHeartClick(mobile: MobileModel) {
         presenter.setHeartClick(mobile)
         setMobileAdapter(mobileList)
@@ -108,7 +105,6 @@ class MobileFragment : Fragment(),
         context!!.startActivity(intent)
     }
 
-
     private fun setMobileAdapter(list: List<MobileModel>) {
         mobileList = list
         mobileAdapter.submitList(mobileList)
@@ -117,6 +113,7 @@ class MobileFragment : Fragment(),
 
 interface MobileFragmentPresenterInterface {
     fun loadMobileList(mobileList: List<MobileModel>)
+    fun showToast(message: String)
 }
 
 

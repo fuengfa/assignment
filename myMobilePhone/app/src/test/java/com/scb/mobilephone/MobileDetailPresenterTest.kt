@@ -1,4 +1,4 @@
-package com.scb.mobilephone.ui.test
+package com.scb.mobilephone
 
 class MobileDetailPresenterTest {
 

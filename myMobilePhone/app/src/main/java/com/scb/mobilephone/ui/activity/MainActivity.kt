@@ -33,29 +33,11 @@ class MainActivity : AppCompatActivity() {
             var values = arrayOf<CharSequence>(" Price low to high ", " Price high to low ", " Rating 5-1 ")
             builder.setSingleChoiceItems(values, -1, DialogInterface.OnClickListener { dialog, item ->
                 when (item) {
-                    0 -> {
-                        if (viewPager.currentItem == 0) {
-                            sectionsPagerAdapter.mobileFragment.sortPriceLowToHeight()
-                        } else if (viewPager.currentItem == 1) {
-                            sectionsPagerAdapter.favoriteFragment.sortPriceLowToHeight()
-                        }
-                    }
+                    0 -> sectionsPagerAdapter.sortFunction(item)
 
-                    1 -> {
-                        if (viewPager.currentItem == 0) {
-                            sectionsPagerAdapter.mobileFragment.sortPriceHighToLow()
-                        } else if (viewPager.currentItem == 1) {
-                            sectionsPagerAdapter.favoriteFragment.sortPriceHighToLow()
-                        }
-                    }
+                    1 -> sectionsPagerAdapter.sortFunction(item)
 
-                    2 -> {
-                        if (viewPager.currentItem == 0) {
-                            sectionsPagerAdapter.mobileFragment.sortRating()
-                        } else if (viewPager.currentItem == 1) {
-                            sectionsPagerAdapter.favoriteFragment.sortRatingFromHighToLow()
-                        }
-                    }
+                    2 -> sectionsPagerAdapter.sortFunction(item)
                 }
                 alertDialog1.dismiss()
             })
@@ -71,12 +53,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab?.position == 0) {
-                    sectionsPagerAdapter.mobileFragment.onDataChange()
-
-                } else {
-                    sectionsPagerAdapter.favoriteFragment.submitDataChange()
-                }
+                sectionsPagerAdapter.upDateFragmentData()
             }
         })
     }
@@ -100,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun createSectionPageAdapter() {
-        sectionsPagerAdapter = SectionsPagerAdapter(this@MainActivity, supportFragmentManager)
+        sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
         viewPager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(viewPager)
     }

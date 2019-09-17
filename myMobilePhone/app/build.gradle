@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'org.jetbrains.kotlin.android'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
@@ -33,9 +35,15 @@ dependencies {
     //test
     testImplementation 'androidx.test:core:1.2.0'
     testImplementation "org.mockito:mockito-core:2.28.2"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"
+    testImplementation 'org.mockito:mockito-inline:2.8.47'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3"
     testImplementation 'org.jmockit:jmockit:1.40'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    kapt "android.arch.lifecycle:compiler:$arc_lib_version"
+
+    //MVVM
+    implementation 'android.arch.lifecycle:extensions:1.0.0-alpha2'
+    annotationProcessor 'android.arch.lifecycle:compiler:1.0.0-alpha2'
 
     implementation "androidx.room:room-runtime:2.1.0"
     kapt "androidx.room:room-compiler:2.1.0"
@@ -55,6 +63,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'com.android.support.test:rules:1.2.0'
+    androidTestImplementation 'com.android.support.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }

@@ -121,3 +121,4 @@ class FavoriteFragment: Fragment(),
         setFavoriteAdapter(sortList.sortedByDescending { it.rating })
     }
 }
+

@@ -49,7 +49,7 @@ class MobileDetailActivity : AppCompatActivity() , MobileDetailInterface{
         detailRating = findViewById(R.id.detailRating)
         detailDes = findViewById(R.id.detailDes)
         detailprice = findViewById(R.id.detailPrice)
-        pictures = ArrayList<Pictures>()
+        pictures = ArrayList()
     }
 
     private fun showActionBar() {

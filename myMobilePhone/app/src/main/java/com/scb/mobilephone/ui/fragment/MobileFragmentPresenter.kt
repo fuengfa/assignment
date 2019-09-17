@@ -20,11 +20,12 @@ class MobileFragmentPresenter(val view: MobileFragmentPresenterInterface) {
 
     private val songListCallback = object : Callback<List<MobileModel>> {
         override fun onFailure(call: Call<List<MobileModel>>, t: Throwable) {
+            view.showToast("Can not load Mobile list!!")
         }
 
         override fun onResponse(call: Call<List<MobileModel>>, response: Response<List<MobileModel>>) {
-            var mobileList = response.body()!!
-            queryRoomDatabaseByMobileId(mobileList)
+            view.showToast("Download mobile list Completed!!")
+            queryRoomDatabaseByMobileId(response.body()!!)
         }
     }
 
@@ -40,7 +41,6 @@ class MobileFragmentPresenter(val view: MobileFragmentPresenterInterface) {
         }
         cmWorkerThread.postTask(task)
     }
-
 
     fun loadMobile() {
         ApiManager.mobileService.mobile().enqueue(songListCallback)

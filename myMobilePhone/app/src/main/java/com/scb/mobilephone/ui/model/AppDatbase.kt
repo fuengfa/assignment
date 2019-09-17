@@ -12,7 +12,7 @@ abstract class AppDatbase : RoomDatabase() {
     abstract fun mobileDao(): MobileDAO
 
     companion object {
-        private val TAG: String by lazy { AppDatbase::class.java.simpleName }
+//        private val TAG: String by lazy { AppDatbase::class.java.simpleName }
         private var instance: AppDatbase? = null
 
         fun getInstance(context: Context): AppDatbase {
